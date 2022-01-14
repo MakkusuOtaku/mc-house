@@ -1,0 +1,33 @@
+{
+    "default": {
+        "door": "oak_door",
+        "floor": "cobblestone",
+        "roof": "bricks",
+        "wall": "oak_planks",
+        "window": "glass"
+    },
+    "classic": {
+        "door": "oak_door",
+        "floor": ["stone_bricks", "cracked_stone_bricks", "mossy_stone_bricks", "cobblestone", "mossy_cobblestone"],
+        "roof": ["stone_bricks", "cracked_stone_bricks"],
+        "wall": "spruce_planks",
+        "window": "glass"
+    },
+    "mansion": {
+        "door": "oak_door",
+        "floor": "cobblestone",
+        "roof": "stone_bricks",
+        "roof-edge": "stone_bricks",
+        "wall": "dark_oak_planks",
+        "wall-edge": "dark_oak_planks",
+        "window": "glass"
+    },
+    "dojo": {
+        "door": "birch_door",
+        "floor": "birch_planks",
+        "roof": "dark_prismarine",
+        "wall": "quartz_block",
+        "wall-edge": "dark_oak_log",
+        "window": "glass"
+    }
+}

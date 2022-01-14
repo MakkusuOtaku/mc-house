@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+        <meta name='viewport' content='width=device-width, initial-scale=1'>
+        <meta name='description' content='A procedural house generator for Minecraft.'>
+        <meta name='author' content='Makkusu Otaku'>
+        <link rel="icon" href="icon.png">
+        <title>mc-house</title>
+        <link rel='stylesheet' type='text/css' media='screen' href='style.css'>
+    </head>
+    <body>
+        <div id="header">
+            <canvas id="header-canvas"></canvas>
+            <div id="buttons">
+                <button id="generate-button">
+                    <svg width="64" height="64">
+                        <rect x="0" y="0" width="64" height="64" rx="16" ry="16" fill="#fff" />
+                        <circle cx="32" cy="32" r="8" fill="cornflowerblue" />
+                        <circle cx="16" cy="16" r="8" fill="cornflowerblue" />
+                        <circle cx="48" cy="48" r="8" fill="cornflowerblue" />
+                    </svg>
+                </button>
+                <!--button id="save-button" onclick="save()">Save</button-->
+                <!--button id="load-button" onclick="load()">Load</button-->
+                <button id="screenshot-button">
+                    <svg width="64" height="64">
+                        <rect x="0" y="14" width="64" height="50" rx="12" ry="12" fill="#fff" />
+                        <rect x="16" y="8" width="32" height="16" rx="8" ry="8" fill="#fff" />
+                        <circle cx="32" cy="38" r="14" fill="cornflowerblue" />
+                    </svg>
+                </button>
+            </div>
+        </div> 
+        <main>
+            <h1>House Generator</h1>
+            <div class="gen-step">
+                <canvas id="room-map"></canvas>
+                <div>
+                    <h2>Rooms</h2>
+                    First, choose the number of rooms you want to generate.
+                    We place one room in the center of the map.
+                    The rest of the rooms are placed randomly next to the prexisting rooms.
+                </div>
+            </div>
+            <div class="gen-step">
+                <canvas id="window-map"></canvas>
+                <div>
+                    <h2>Windows</h2>
+                    A window map is generated which determines where the windows are placed.
+                    This pattern is wrapped around the building and alternates between being horizontally flipped and not flipped.
+                </div>
+            </div>
+            <div class="gen-step">
+                <canvas id="roof-map"></canvas>
+                <div>
+                    <h2>Roof</h2>
+                    The roof is made of two main parts: the ridges and the peaks.
+                    For each position the distance to both the nearest ridge and the nearest peak is calculated.
+                    These values are multiplied by random weights and added together to make the final value.
+                    This "final value" is then passed through a transformation function to get the actual roof height.
+                </div>
+            </div>
+            <div class="gen-step">
+                <canvas id="palette-map"></canvas>
+                <div>
+                    <h2>Block Palette</h2>
+                    There are some number of block palettes that the houses can use.
+                    These palettes determine which blocks are used for the different parts of the house.
+                    For example, the roof of this building is made of bricks.
+                </div>
+            </div>
+        </main>
+        <div id="footer">
+            Thanks for reading.
+        </div>
+        <script src="house.js"></script>
+        <script type="module" src="script.js"></script>
+        <script type="module" src="display-3d.js"></script>
+    </body>
+</html>
