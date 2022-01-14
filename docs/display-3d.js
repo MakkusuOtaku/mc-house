@@ -303,7 +303,7 @@ textures.minFilter = THREE.LinearMipMapLinearFilter;
 const material = new THREE.MeshPhongMaterial({ 
     map: textures,
     transparent: true,
-    //side: THREE.DoubleSide,
+    side: THREE.DoubleSide,
     wireframe: false,
     clippingPlanes: [ clippingPlane ],
     clipShadows: true,
