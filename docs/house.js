@@ -1,5 +1,6 @@
 const maxSize = 5;
 const roomSize = 5;
+const ceilHeight = 4;
 const blocks = [
     'air',
     'oak_planks',
@@ -81,6 +82,8 @@ function generateHouse() {
     house.palette = choose(Object.values(palettes));
     console.log(house.palette);
 
+    house.windowMap = generateWindow();
+
     house.weights = {};
     house.weights.ridge = choose([0, 0.5, 0.75, 1, 2]);
 
@@ -110,6 +113,31 @@ function generateHouse() {
         }
     }
     console.log(house);
+}
+
+function generateWindow() {
+    // Generate a window map
+    let windowMap = new Array(ceilHeight+1).fill(0).map(()=>{
+        return new Array(roomSize).fill(0);
+    });
+
+    // Generate a random rectangle between 1,1 and ceilHeight-1,roomSize-1
+    // maxX and maxZ must be larger than minX and minZ respectively
+    let minX = Math.floor(Math.random()*(ceilHeight-2))+1;
+    let minZ = Math.floor(Math.random()*(roomSize-2))+1;
+    let maxX = Math.floor(Math.random()*(ceilHeight-minX-1))+minX+1;
+    let maxZ = Math.floor(Math.random()*(roomSize-minZ-1))+minZ+1;
+
+    console.log({minX, minZ, maxX, maxZ});
+
+    // Fill the window map with 1s
+    for (let x = minX; x < maxX; x++) {
+        for (let z = minZ; z < maxZ; z++) {
+            windowMap[x][z] = 1;
+        }
+    }
+
+    return windowMap;
 }
 
 function addOpen(x, z) {
@@ -231,10 +259,14 @@ function checkWall(x, y, z, roomX, roomZ) {
 }
 
 function checkWindow(x, y, z) {
-    a = y % windowMap.length;
-    b = (z+x) % windowMap[0].length;
+    let wMap = house.windowMap;
 
-    return windowMap[a][b];
+    a = y % wMap.length;
+    b = (z+x) % wMap[0].length;
+
+    a = wMap.length-1-a;
+
+    return wMap[a][b];
 }
 
 function getBlock(x, y, z) {
@@ -254,7 +286,7 @@ function getBlock(x, y, z) {
     if (roomMap[roomX][roomZ]) {
         if (y == 0) return 'floor';
         if (y == roofHeight) return 'roof';
-        if (y > 4) return 'roof';
+        if (y > ceilHeight) return 'roof';
 
         let isWall = checkWall(x, y, z, roomX, roomZ);
 

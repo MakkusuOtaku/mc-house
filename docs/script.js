@@ -58,9 +58,9 @@ console.log(windowContext);
 
 glassImage.onload = ()=>{
     let unit = windowCanvas.width/5;
-    for (let x = 0; x < windowMap.length; x++) {
-        for (let z = 0; z < windowMap[0].length; z++) {
-            if (windowMap[x][z]) {
+    for (let x = 0; x < house.windowMap.length; x++) {
+        for (let z = 0; z < house.windowMap[0].length; z++) {
+            if (house.windowMap[x][z]) {
                 //windowContext.fillRect(x*unit+16, z*unit+16, unit-32, unit-32);
                 windowContext.drawImage(glassImage, z*unit, x*unit, unit, unit);
             }
