@@ -52,9 +52,6 @@ windowContext.shadowOffsetY = 8;
 windowContext.shadowBlur = 5;
 
 const glassImage = new Image();
-glassImage.src = "./glass.png";
-
-console.log(windowContext);
 
 glassImage.onload = ()=>{
     let unit = windowCanvas.width/5;
@@ -99,8 +96,48 @@ function drawRoof() {
     }
 }
 
+const paletteCanvas = document.querySelector('#palette-map');
+paletteCanvas.width = paletteCanvas.clientWidth;
+paletteCanvas.height = paletteCanvas.clientHeight;
+const paletteContext = paletteCanvas.getContext('2d');
+
+paletteContext.imageSmoothingEnabled = false;
+
+const textureImage = new Image();
+
+textureImage.onload = ()=>{
+    let wallBlock = blocks.indexOf(house.palette.wall);
+    let roofBlock = blocks.indexOf(house.palette.roof);
+    let floorBlock = blocks.indexOf(house.palette.floor);
+    let windowBlock = blocks.indexOf(house.palette.window);
+
+    let u = paletteCanvas.width;
+
+    paletteContext.drawImage(textureImage,
+        wallBlock*16, 0, 16, 16,
+        u*0.1, u*0.1, u/2.5, u/2.5
+    );
+
+    paletteContext.drawImage(textureImage,
+        roofBlock*16, 0, 16, 16,
+        u*0.23, u*0.23, u/2.5, u/2.5
+    );
+
+    paletteContext.drawImage(textureImage,
+        floorBlock*16, 0, 16, 16,
+        u*0.37, u*0.37, u/2.5, u/2.5
+    );
+
+    paletteContext.drawImage(textureImage,
+        windowBlock*16, 0, 16, 16,
+        u*0.5, u*0.5, u/2.5, u/2.5
+    );
+};
+
 function init() {
     drawRooms();
+    glassImage.src = "./glass.png";
+    textureImage.src = "./textures-extended.png";
     //drawRoof();
 }
 
