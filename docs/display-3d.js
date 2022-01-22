@@ -359,6 +359,5 @@ window.addEventListener('keydown', (e) => {
     if (e.key == 'Enter') toggleAnimation();
     if (e.key == '=') spinSpeed *= 2;
     if (e.key == '-') spinSpeed /= 2;
-    // Check if backspace
     if (e.key == 'Backspace') clippingPlane.constant = -2;
 });
