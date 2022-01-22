@@ -94,6 +94,14 @@ function drawRoof() {
         roofContext.lineTo(ridge.x2/roomSize*unit, ridge.z2/roomSize*unit);
         roofContext.stroke();
     }
+
+    roofContext.fillStyle = "#f009";
+    for (let peak of house.peaks) {
+        roofContext.beginPath();
+        roofContext.moveTo(peak.x/roomSize*unit, peak.z/roomSize*unit);
+        roofContext.arc(peak.x/roomSize*unit, peak.z/roomSize*unit, unit/10, 0, Math.PI*2);
+        roofContext.fill();
+    }
 }
 
 const paletteCanvas = document.querySelector('#palette-map');

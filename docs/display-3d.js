@@ -338,15 +338,24 @@ setTimeout(() => {
     renderer.render(scene, camera);
 }, 1000);
 
-setInterval(()=>{
-    //cameraObject.rotation.y += 0.01;
-    //clippingPlane.constant += 0.02;
+var animated = false;
+var animation = null;
+var spinSpeed = 0.01;
 
-    //let time = Date.now() - startTime;
-    //let t = easeOutElastic(time / 1000);
-
-    //camera.position.x = (t * 10)-12.5;
-
+function animate() {
+    cameraObject.rotation.y += spinSpeed;
     renderer.render(scene, camera);
+}
 
-}, 1000 / 30);
+function toggleAnimation() {
+    if (animated) clearInterval(animation);
+    else animation = setInterval(animate, 1000/60);
+    animated = !animated;
+}
+
+window.addEventListener('keydown', (e) => {
+    console.log(e.key);
+    if (e.key == 'Enter') toggleAnimation();
+    if (e.key == '=') spinSpeed *= 2;
+    if (e.key == '-') spinSpeed /= 2;
+});

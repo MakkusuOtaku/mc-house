@@ -86,8 +86,20 @@ function generateHouse() {
 
     house.weights = {};
     house.weights.ridge = choose([0, 0.5, 0.75, 1, 2]);
+    house.weights.peak = choose([0, 0.5, 0.75, 1, 2]);
 
     house.rooms = [];
+
+    house.ridges = [];
+    house.peaks = [];
+
+    generateRidges();
+    generatePeaks();
+
+    console.log(house);
+}
+
+function generateRidges() {
     house.ridges = [];
 
     for (let x = 0; x < maxSize; x++) {
@@ -112,7 +124,57 @@ function generateHouse() {
             }
         }
     }
-    console.log(house);
+}
+
+function generatePeaks() {
+    house.peaks = [];
+
+    if (roomCount == 1) {
+        house.peaks.push({
+            x: (maxSize/2)*roomSize,
+            z: (maxSize/2)*roomSize,
+        });
+        return;
+    }
+
+    for (let x = 0; x < maxSize; x++) {
+        for (let z = 0; z < maxSize; z++) {
+            if (!roomMap[x+0][z+0]) continue;
+            if (!roomMap[x+0][z+1]) continue;
+            if (!roomMap[x+1][z+0]) continue;
+            if (!roomMap[x+1][z+1]) continue;
+
+            house.peaks.push({
+                x: (x+1)*roomSize-0.5,
+                z: (z+1)*roomSize-0.5,
+            });
+        }
+    }
+}
+
+function generateWindow() {
+    let windowMap = [];
+
+    for (let x = 0; x < maxSize; x++) {
+        windowMap.push([]);
+        for (let z = 0; z < maxSize; z++) {
+            windowMap[x].push(false);
+        }
+    }
+
+    for (let x = 0; x < maxSize; x++) {
+        for (let z = 0; z < maxSize; z++) {
+            if (roomMap[x][z]) {
+                let weights = getRoofWeights(x, z);
+                let chance = weights.axisX + weights.axisZ;
+                if (Math.random() < chance) {
+                    windowMap[x][z] = true;
+                }
+            }
+        }
+    }
+
+    return windowMap;
 }
 
 function generateWindow() {
@@ -224,18 +286,16 @@ function getRoofHeight(x, z) {
 
     for (let ridge of house.ridges) {
         let d = lineDistance(x, z, ridge.x1, ridge.z1, ridge.x2, ridge.z2);
-        if (d < ridgeDistance) {
-            ridgeDistance = d;
-        }
+        if (d < ridgeDistance) ridgeDistance = d;
     }
 
-    h = -ridgeDistance;
+    ridgeHeight = -ridgeDistance;
 
     // Calculate the lowest possible ridge height
 
     let lowRidge = house.weights.ridge*(roomSize/2+1.5);
 
-    return (4+lowRidge)+Math.floor(h*house.weights.ridge);
+    return (4+lowRidge)+Math.floor(ridgeHeight*house.weights.ridge);
 }
 
 function checkRoom(x, y) {
@@ -318,7 +378,7 @@ function type2Block(type) {
     return choose(block);
 }
 
-function getBlockMap(x=0, y=0, z=0, chunkSize=roomSize*maxSize) {
+function getBlockMap(x=0, y=0, z=0, chunkSize=roomSize*maxSize, convert2IDs=true) {
 
     let chunk = [];
     for (let xx = 0; xx < chunkSize; xx++) {
@@ -328,7 +388,7 @@ function getBlockMap(x=0, y=0, z=0, chunkSize=roomSize*maxSize) {
             for (let zz = 0; zz < chunkSize; zz++) {
                 let block = getBlock(x+xx, y+yy, z+zz);
                 block = type2Block(block);
-                chunk[xx][yy][zz] = blocks.indexOf(block);
+                chunk[xx][yy][zz] = convert2IDs? blocks.indexOf(block) : block;
             }
         }
 
@@ -340,3 +400,10 @@ loadPalettes().then(()=>{
     console.log('Palettes loaded');
     generateHouse();
 });
+
+// Execute only if the script is run in node
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+    module.exports = {
+        getBlockMap: getBlockMap
+    };
+}
