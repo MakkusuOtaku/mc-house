@@ -344,6 +344,7 @@ var spinSpeed = 0.01;
 
 function animate() {
     cameraObject.rotation.y += spinSpeed;
+    clippingPlane.constant += spinSpeed*2;
     renderer.render(scene, camera);
 }
 
@@ -358,4 +359,6 @@ window.addEventListener('keydown', (e) => {
     if (e.key == 'Enter') toggleAnimation();
     if (e.key == '=') spinSpeed *= 2;
     if (e.key == '-') spinSpeed /= 2;
+    // Check if backspace
+    if (e.key == 'Backspace') clippingPlane.constant = -2;
 });
