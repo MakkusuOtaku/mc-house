@@ -96,6 +96,7 @@ const blockUV = {
 
 // Number of blocks devided by 1.
 const textureSize = 1/15;
+const p = textureSize/32;
 
 const uv = [
     [0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0],
@@ -117,8 +118,13 @@ for (let i = 0; i < uv.length; i++) {
 function getUV(id, side, uvList=uv) {
     // Return uv[side] but add (id*textureSize) to every second value
     let thisUV = [...uvList[side]];
-    for (let i = 0; i < thisUV.length; i+=2) {
-        thisUV[i] += textureSize*id;
+    for (let i = 0; i < thisUV.length; i+=12) {
+        thisUV[i+ 0] += (textureSize*id)+p;
+        thisUV[i+ 2] += (textureSize*id)+p;
+        thisUV[i+ 4] += (textureSize*id)+p;
+        thisUV[i+ 6] += (textureSize*id)-p;
+        thisUV[i+ 8] += (textureSize*id)-p;
+        thisUV[i+10] += (textureSize*id)-p;
     }
     return thisUV;//thisUV.map((v,i)=> i%2 ? v + (id * textureSize) : v);
 }
