@@ -74,13 +74,50 @@ function screenshot(width=3840, height=2160) {
     camera.aspect = canvas.width/canvas.height;
     camera.updateProjectionMatrix();
     renderer.setSize(originalWidth, originalHeight);
+    renderer.render(scene, camera);
 }
 
-document.getElementById('screenshot-button').addEventListener('click', () => {
+const cameraButton = document.querySelector('#screenshot-button');
+const resolutionSelector = document.querySelector('#resolution');
+
+cameraButton.addEventListener('click', () => {
     screenshot();
 });
 
-window.addEventListener('resize', ()=>{
+cameraButton.addEventListener('contextmenu', (event) => {
+    event.preventDefault();
+    resolutionSelector.style.display = 'flex';
+    resolutionSelector.style.animation = 'inflate 500ms ease-out';
+    setTimeout(() => {
+        resolutionSelector.style.animation = 'shake 500ms ease-out';
+    }, 500);
+});
+
+resolutionSelector.addEventListener('mouseover', () => {
+    resolutionSelector.innerHTML = `
+        <li class="res">64k</li>
+        <li class="res">32k</li>
+        <li class="res">16k</li>
+        <li class="res">8k</li>
+        <li class="res">4k</li>
+        <li class="res">1080p</li>
+    `;
+});
+
+resolutionSelector.addEventListener('click', () => {
+    resolutionSelector.style.height = '32px';
+    resolutionSelector.style.color = '#fff0';
+
+    setTimeout(() => {
+        resolutionSelector.style.animation = 'deflate 500ms ease-out';
+    }, 500);
+
+    setTimeout(() => {
+        resolutionSelector.style.display = 'none';
+    }, 1000);
+});
+
+function adjustCanvas() {
     canvas.width = canvas.clientWidth;
     canvas.height = canvas.clientHeight;
 
@@ -88,6 +125,18 @@ window.addEventListener('resize', ()=>{
     camera.updateProjectionMatrix();
 
     renderer.setSize(canvas.width, canvas.height);
+    renderer.render(scene, camera);
+}
+
+window.addEventListener('resize', adjustCanvas);
+
+window.addEventListener('keydown', (event) => {
+    if (event.key === 'f') {
+        if (document.fullscreenElement) document.exitFullscreen();
+        else canvas.requestFullscreen();
+
+        setTimeout(adjustCanvas, 100);
+    }
 });
 
 const blockUV = {
