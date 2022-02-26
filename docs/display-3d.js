@@ -26,12 +26,10 @@ const renderer = new THREE.WebGLRenderer({
     alpha: true,
 });
 
-console.log(renderer.shadowMap);
 renderer.shadowMap.enabled = true;
 renderer.localClippingEnabled = true;
 
 const scene = new THREE.Scene();
-
 const camera = new THREE.PerspectiveCamera(45, canvas.width/canvas.height, 0.1, 1000);
 camera.position.y = 15;
 camera.position.z = -35;
@@ -395,7 +393,7 @@ setTimeout(() => {
 
 var animated = false;
 var animation = null;
-var spinSpeed = 0.01;
+var spinSpeed = 0.005;
 
 function animate() {
     cameraObject.rotation.y += spinSpeed;

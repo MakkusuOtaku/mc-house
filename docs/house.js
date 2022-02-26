@@ -1,6 +1,7 @@
 const maxSize = 5;
 const roomSize = 5;
 const ceilHeight = 4;
+
 const blocks = [
     'air',
     'oak_planks',
